@@ -1,6 +1,6 @@
 ## Función `get_next_line`
 ---
-La función `get_next_line` es una implementación personalizada en C que lee un archivo descriptor y devuelve una línea completa del archivo. Su propósito es leer archivos línea por línea, independientemente de su tamaño, y está diseñada para ser utilizada en proyectos de programación, como en la escuela de informática 42. 
+La función `get_next_line` es una implementación personalizada en C que lee un archivo descriptor y devuelve una línea completa del archivo. Su propósito es leer archivos línea por línea, **independientemente de su tamaño**, y está diseñada para ser utilizada en proyectos de programación, como en la escuela de informática 42. 
 
 Las características clave de `get_next_line` incluyen:
 
