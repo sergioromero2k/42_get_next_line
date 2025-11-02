@@ -6,7 +6,7 @@
 /*   By: sergio-alejandro <sergio-alejandro@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 18:33:43 by sergio-alej       #+#    #+#             */
-/*   Updated: 2025/10/29 20:10:59 by sergio-alej      ###   ########.fr       */
+/*   Updated: 2025/11/02 11:07:11 by sergio-alej      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ size_t	ft_strlen(const char *s)
 	}
 	return (i);
 }
-/* int	main(void)
+int	main(void)
 {
 	// ft_strlen
 	printf("%ld\n", ft_strlen("Hola mundo"));
@@ -38,4 +38,4 @@ size_t	ft_strlen(const char *s)
 	printf("%ld\n", strlen("Hola mundo"));
 	// printf("%ld\n", strlen(NULL));
 	// Fallo de segmentación. --> __nonnull ((1)) explicarle que es esto.
-} */
+}
