@@ -4,7 +4,10 @@ Estos ejercicios se centran en el uso correcto de malloc y, fundamentalmente, en
 
 ### 1. Fácil: Array de enteros variable
 
-Escribe un programa que solicite al usuario la cantidad $N$ de números enteros que desea almacenar. Utiliza malloc para asignar dinámicamente el espacio exacto para este array de $N$ enteros. Luego, utiliza un bucle para solicitar al usuario que ingrese cada uno de esos $N$ valores y, finalmente, imprime todos los valores almacenados. Asegúrate de manejar el posible fallo de asignación (NULL) y de liberar la memoria antes de terminar.
+* Escribe un programa que solicite por consola al usuario la cantidad N de números enteros que desea almacenar. 
+* Utiliza malloc para asignar dinámicamente el espacio exacto para este array de N enteros. 
+* Luego, utiliza un bucle para solicitar al usuario que ingrese cada uno de esos N valores y, finalmente, imprime todos los valores almacenados. 
+* Asegúrate de manejar el posible fallo de asignación (NULL) y de liberar la memoria antes de terminar.
 
 ### 2. Intermedio: Estructura de datos dinámica
 
