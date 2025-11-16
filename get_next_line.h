@@ -6,13 +6,18 @@
 /*   By: sergio-alejandro <sergio-alejandro@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 21:05:20 by sergio-alej       #+#    #+#             */
-/*   Updated: 2025/11/02 11:44:20 by sergio-alej      ###   ########.fr       */
+/*   Updated: 2025/11/16 18:07:34 by sergio-alej      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 10
+# endif
+
+# include <fcntl.h>
 # include <limits.h>
 # include <stdint.h>
 # include <stdio.h>
