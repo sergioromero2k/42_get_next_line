@@ -6,7 +6,7 @@
 /*   By: sergio-alejandro <sergio-alejandro@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 21:05:17 by sergio-alej       #+#    #+#             */
-/*   Updated: 2025/11/16 18:51:09 by sergio-alej      ###   ########.fr       */
+/*   Updated: 2025/11/17 21:56:20 by sergio-alej      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,33 @@
 
 char	*get_next_line(int fd)
 {
-	char	*arr;
-	ssize_t	n_bytes;
+	static char	*chunk;
+	ssize_t		n_bytes;
+	// int			len_linea;
+	size_t		i;
+	size_t		salto_linea;
+	char		*new_line;
 
+	salto_linea = 1;
 	if (fd < 0)
 		return (NULL);
-	arr = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	if (!arr)
-		return (free(arr), NULL);
-	while ((n_bytes = read(fd, arr, sizeof(arr))) > 0)
+	chunk = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	if (!chunk)
+		return (free(chunk), NULL);
+	new_line = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	while (salto_linea && ((n_bytes = read(fd, chunk, BUFFER_SIZE)) > 0))
 	{
-		if (write(STDOUT_FILENO, arr, n_bytes) == -1)
-			return (free(arr), NULL);
+		i = 0;
+		if (chunk[i] != '\n')
+			salto_linea = 0;
+		new_line[i] = chunk[i];
+		i++;
 	}
 	if (n_bytes == -1)
-		return (free(arr), NULL);
+		return (free(chunk), NULL);
 	if (close(fd) == -1)
 		return (NULL);
-
+	return (new_line);
 }
 
 int	main(int argc, char **argv)
