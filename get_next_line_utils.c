@@ -6,7 +6,7 @@
 /*   By: sergio-alejandro <sergio-alejandro@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 21:05:07 by sergio-alej       #+#    #+#             */
-/*   Updated: 2025/11/18 20:28:22 by sergio-alej      ###   ########.fr       */
+/*   Updated: 2025/11/18 21:40:20 by sergio-alej      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*s1_new;
@@ -97,4 +96,22 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	dst[i] = '\0';
 	return (len_src);
 }
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
+{
+	size_t	i;
+	size_t	dst_len;
+	size_t	src_len;
 
+	dst_len = ft_strlen(dst);
+	src_len = ft_strlen(src);
+	if (size <= dst_len)
+		return (size + src_len);
+	i = 0;
+	while (src[i] && dst_len + i < size - 1)
+	{
+		dst[dst_len + i] = src[i];
+		i++;
+	}
+	dst[dst_len + i] = '\0';
+	return (dst_len + src_len);
+}

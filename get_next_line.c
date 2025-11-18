@@ -6,7 +6,7 @@
 /*   By: sergio-alejandro <sergio-alejandro@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 21:05:17 by sergio-alej       #+#    #+#             */
-/*   Updated: 2025/11/18 21:16:44 by sergio-alej      ###   ########.fr       */
+/*   Updated: 2025/11/18 21:37:47 by sergio-alej      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,46 +65,23 @@ char	*read_file_descriptor(int fd, char *text)
 		}
 	}
 	free(new_text);
-	if (n_bytes_read < 0)
+	if (n_bytes_read <= 0)
 		return (free(text), text = NULL, NULL);
 	return (text);
 }
 char	*get_next_line(int fd)
 {
-	char	chunk[BUFFER_SIZE];
-	size_t	n_bytes_read;
-	size_t	i;
-	size_t	len;
-	bool	salto_linea;
-	char	*new_line;
+	static char	*text;
+	char		*line;
 
-	// int			len_linea;
-	len = 0;
-	salto_linea = false;
-	if (fd < 0 || BUFFER_SIZE < 0)
-		return (NULL);
-	new_line = ft_calloc(BUFFER_SIZE, sizeof(char));
-	if (!new_line)
-		return (NULL);
-	while (!salto_linea && ((n_bytes_read = read(fd, chunk, BUFFER_SIZE)) > 0))
-	{
-		i = 0;
-		while (i < n_bytes_read)
-		{
-			new_line[len++] = chunk[i];
-			if (chunk[i] == '\n')
-			{
-				salto_linea = true;
-				break ;
-			}
-			i++;
-		}
-	}
-	// if (n_bytes_read < 0)
-	// 	return (NULL);
-	if (close(fd) == -1)
-		return (NULL);
-	return (new_line);
+	text = NULL;
+	text = read_file_descriptor(fd, text);
+	if (text)
+		return (text = NULL, NULL);
+	line = read_one_line(text);
+	if (line)
+		return (line = NULL, NULL);
+	return (line);
 }
 
 int	main(int argc, char **argv)
