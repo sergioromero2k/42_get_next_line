@@ -6,7 +6,7 @@
 /*   By: sergio-alejandro <sergio-alejandro@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 21:05:17 by sergio-alej       #+#    #+#             */
-/*   Updated: 2025/11/18 20:42:18 by sergio-alej      ###   ########.fr       */
+/*   Updated: 2025/11/18 21:16:44 by sergio-alej      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,49 @@ size_t	ft_strlen_jump_line(char *s)
 	return (i);
 }
 
+char	*read_one_line(char *line)
+{
+	size_t	i;
+	char	*new_line;
+	size_t	long_line;
+
+	if (!line[0])
+		return (NULL);
+	i = 0;
+	long_line = ft_strlen_jump_line(line);
+	new_line = ft_calloc(long_line + 1, 1);
+	if (!new_line)
+		return (NULL);
+	while (!line[i] && line[i] != '\n')
+	{
+		new_line[i] = line[i];
+		i++;
+	}
+	return (new_line);
+}
+char	*read_file_descriptor(int fd, char *text)
+{
+	char	*new_text;
+	size_t	n_bytes_read;
+
+	new_text = ft_calloc(BUFFER_SIZE + 1, 1);
+	if (!new_text)
+		return (free(text), text = NULL, NULL);
+	n_bytes_read = 1;
+	while (n_bytes_read > 0 && !ft_strchr(text, '\n'))
+	{
+		n_bytes_read = read(fd, new_text, BUFFER_SIZE);
+		if (n_bytes_read > 0)
+		{
+			new_text[n_bytes_read] = '\0';
+			text = ft_strjoin(text, new_text);
+		}
+	}
+	free(new_text);
+	if (n_bytes_read < 0)
+		return (free(text), text = NULL, NULL);
+	return (text);
+}
 char	*get_next_line(int fd)
 {
 	char	chunk[BUFFER_SIZE];
@@ -61,28 +104,6 @@ char	*get_next_line(int fd)
 	// 	return (NULL);
 	if (close(fd) == -1)
 		return (NULL);
-	return (new_line);
-}
-char	*read_one_line(char *line)
-{
-	size_t	i;
-	char	*new_line;
-	size_t	long_line;
-
-	if (!line[0])
-		return (NULL);
-	i = 0;
-	long_line = ft_strlen_jump_line(line);
-	new_line = ft_calloc(long_line, 1);
-	if (!new_line)
-		return (NULL);
-	while (!line[i] && line[i] != '\n')
-	{
-		new_line[i] = line[i];
-		i++;
-	}
-	if (line[i] == '\n')
-		new_line[i++] = '\0';
 	return (new_line);
 }
 
