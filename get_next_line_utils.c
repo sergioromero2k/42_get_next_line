@@ -6,7 +6,7 @@
 /*   By: sergio-alejandro <sergio-alejandro@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 21:05:07 by sergio-alej       #+#    #+#             */
-/*   Updated: 2025/11/02 11:42:14 by sergio-alej      ###   ########.fr       */
+/*   Updated: 2025/11/18 20:28:22 by sergio-alej      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,31 +63,6 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	size_t	len_s;
-	size_t	i;
-	char	*str;
-
-	if (!s)
-		return (NULL);
-	len_s = ft_strlen(s);
-	if (start >= len_s)
-		return (ft_calloc(1, 1));
-	if (len > len_s - start)
-		len = len_s - start;
-	str = (char *)malloc((len + 1) * sizeof(char));
-	if (!str)
-		return (NULL);
-	i = 0;
-	while (i < len && s[start + i])
-	{
-		str[i] = s[start + i];
-		i++;
-	}
-	str[i] = '\0';
-	return (str);
-}
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
@@ -123,41 +98,3 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	return (len_src);
 }
 
-size_t	ft_strlcat(char *dst, const char *src, size_t size)
-{
-	size_t	i;
-	size_t	dst_len;
-	size_t	src_len;
-
-	dst_len = ft_strlen(dst);
-	src_len = ft_strlen(src);
-	if (size <= dst_len)
-		return (size + src_len);
-	i = 0;
-	while (src[i] && dst_len + i < size - 1)
-	{
-		dst[dst_len + i] = src[i];
-		i++;
-	}
-	dst[dst_len + i] = '\0';
-	return (dst_len + src_len);
-}
-
-char	*ft_strdup(const char *s)
-{
-	char	*copy_s;
-	int		len_s;
-	size_t	i;
-
-	i = 0;
-	len_s = ft_strlen(s);
-	copy_s = ft_calloc(len_s + 1, (sizeof(char)));
-	if (!copy_s)
-		return (NULL);
-	while (s[i])
-	{
-		copy_s[i] = s[i];
-		i++;
-	}
-	return (copy_s);
-}
