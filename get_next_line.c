@@ -6,26 +6,13 @@
 /*   By: sergio-alejandro <sergio-alejandro@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 21:05:17 by sergio-alej       #+#    #+#             */
-/*   Updated: 2025/11/19 21:11:53 by sergio-alej      ###   ########.fr       */
+/*   Updated: 2025/11/19 21:58:44 by sergio-alej      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
-
-	i = 0;
-	while (*s)
-	{
-		i++;
-		s++;
-	}
-	return (i);
-}
-
-size_t	ft_strlen_jump_line(char *s)
+size_t	ft_strlen_until_jump_line(char *s)
 {
 	size_t	i;
 
@@ -46,8 +33,8 @@ char	*read_file_descriptor(int fd, char *text)
 	char	*tmp;
 
 	if (!text)
-		text = ft_calloc(1, 1);
-	buf = ft_calloc(BUFFER_SIZE + 1, 1);
+		text = malloc(1);
+	buf = malloc(BUFFER_SIZE + 1);
 	if (!buf || !text)
 		return (free(buf), free(text), NULL);
 	n_read = 1;
@@ -73,10 +60,10 @@ char	*read_one_line(char *line)
 	char	*new_line;
 	size_t	long_line;
 
-	long_line = ft_strlen_jump_line(line);
+	long_line = ft_strlen_until_jump_line(line);
 	if (long_line == 0)
 		return (NULL);
-	new_line = ft_calloc(long_line + 1, 1);
+	new_line = malloc(long_line + 1);
 	if (!new_line)
 		return (NULL);
 	i = 0;
@@ -85,8 +72,10 @@ char	*read_one_line(char *line)
 		new_line[i] = line[i];
 		i++;
 	}
+	new_line[i] = '\0';
 	return (new_line);
 }
+
 char	*get_next_line(int fd)
 {
 	static char	*text;
@@ -102,9 +91,9 @@ char	*get_next_line(int fd)
 	line = read_one_line(text);
 	if (!line)
 		return (NULL);
-	rest = ft_strdup(text + ft_strlen_jump_line(text));
+	rest = ft_strdup(text + ft_strlen_until_jump_line(text));
 	free(text);
-	if (rest && rest[0])
+	if (rest && *rest)
 		text = rest;
 	else
 	{
@@ -114,19 +103,18 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-int	main(int argc, char **argv)
-{
-	int	fd;
+// int	main(int argc, char **argv)
+// {
+// 	int	fd;
 
-	if (argc != 2)
-		return (EXIT_FAILURE);
-	fd = open(argv[1], O_RDONLY);
-	if (fd < 0)
-		return (EXIT_FAILURE);
-	printf("%s\n", get_next_line(fd));
-	printf("%s\n", get_next_line(fd));
-	printf("%s\n", get_next_line(fd));
-	printf("%s\n", get_next_line(fd));
-	// printf("%s\n", get_next_line(fd));
-	// printf("%s\n", get_next_line(fd));
-}
+// 	if (argc != 2)
+// 		return (EXIT_FAILURE);
+// 	fd = open(argv[1], O_RDONLY);
+// 	if (fd < 0)
+// 		return (EXIT_FAILURE);
+// 	printf("%s", get_next_line(fd));
+// 	printf("%s", get_next_line(fd));
+// 	printf("%s", get_next_line(fd));
+// 	printf("%s", get_next_line(fd));
+
+// }
