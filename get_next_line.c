@@ -6,24 +6,65 @@
 /*   By: sergio-alejandro <sergio-alejandro@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 21:05:17 by sergio-alej       #+#    #+#             */
-/*   Updated: 2025/11/18 21:37:47 by sergio-alej      ###   ########.fr       */
+/*   Updated: 2025/11/19 21:11:53 by sergio-alej      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (*s)
+	{
+		i++;
+		s++;
+	}
+	return (i);
+}
 
 size_t	ft_strlen_jump_line(char *s)
 {
 	size_t	i;
 
 	i = 0;
-	while (s[i])
-	{
-		if (s[i] != '\n')
-			break ;
+	if (!s)
+		return (0);
+	while (s[i] && s[i] != '\n')
 		i++;
-	}
+	if (s[i] == '\n')
+		i++;
 	return (i);
+}
+
+char	*read_file_descriptor(int fd, char *text)
+{
+	char	*buf;
+	ssize_t	n_read;
+	char	*tmp;
+
+	if (!text)
+		text = ft_calloc(1, 1);
+	buf = ft_calloc(BUFFER_SIZE + 1, 1);
+	if (!buf || !text)
+		return (free(buf), free(text), NULL);
+	n_read = 1;
+	while (!ft_strchr(text, '\n') && n_read > 0)
+	{
+		n_read = read(fd, buf, BUFFER_SIZE);
+		if (n_read < 0)
+			return (free(buf), free(text), NULL);
+		buf[n_read] = '\0';
+		tmp = text;
+		text = ft_strjoin(tmp, buf);
+		free(tmp);
+		if (!text)
+			return (free(buf), NULL);
+	}
+	free(buf);
+	return (text);
 }
 
 char	*read_one_line(char *line)
@@ -32,55 +73,44 @@ char	*read_one_line(char *line)
 	char	*new_line;
 	size_t	long_line;
 
-	if (!line[0])
-		return (NULL);
-	i = 0;
 	long_line = ft_strlen_jump_line(line);
+	if (long_line == 0)
+		return (NULL);
 	new_line = ft_calloc(long_line + 1, 1);
 	if (!new_line)
 		return (NULL);
-	while (!line[i] && line[i] != '\n')
+	i = 0;
+	while (i < long_line)
 	{
 		new_line[i] = line[i];
 		i++;
 	}
 	return (new_line);
 }
-char	*read_file_descriptor(int fd, char *text)
-{
-	char	*new_text;
-	size_t	n_bytes_read;
-
-	new_text = ft_calloc(BUFFER_SIZE + 1, 1);
-	if (!new_text)
-		return (free(text), text = NULL, NULL);
-	n_bytes_read = 1;
-	while (n_bytes_read > 0 && !ft_strchr(text, '\n'))
-	{
-		n_bytes_read = read(fd, new_text, BUFFER_SIZE);
-		if (n_bytes_read > 0)
-		{
-			new_text[n_bytes_read] = '\0';
-			text = ft_strjoin(text, new_text);
-		}
-	}
-	free(new_text);
-	if (n_bytes_read <= 0)
-		return (free(text), text = NULL, NULL);
-	return (text);
-}
 char	*get_next_line(int fd)
 {
 	static char	*text;
 	char		*line;
+	char		*rest;
 
 	text = NULL;
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
 	text = read_file_descriptor(fd, text);
-	if (text)
-		return (text = NULL, NULL);
+	if (!text || !*text)
+		return (free(text), text = NULL, NULL);
 	line = read_one_line(text);
-	if (line)
-		return (line = NULL, NULL);
+	if (!line)
+		return (NULL);
+	rest = ft_strdup(text + ft_strlen_jump_line(text));
+	free(text);
+	if (rest && rest[0])
+		text = rest;
+	else
+	{
+		free(rest);
+		text = NULL;
+	}
 	return (line);
 }
 
@@ -93,6 +123,9 @@ int	main(int argc, char **argv)
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
 		return (EXIT_FAILURE);
+	printf("%s\n", get_next_line(fd));
+	printf("%s\n", get_next_line(fd));
+	printf("%s\n", get_next_line(fd));
 	printf("%s\n", get_next_line(fd));
 	// printf("%s\n", get_next_line(fd));
 	// printf("%s\n", get_next_line(fd));

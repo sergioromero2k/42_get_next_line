@@ -6,24 +6,12 @@
 /*   By: sergio-alejandro <sergio-alejandro@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 21:05:07 by sergio-alej       #+#    #+#             */
-/*   Updated: 2025/11/18 21:40:20 by sergio-alej      ###   ########.fr       */
+/*   Updated: 2025/11/19 21:15:15 by sergio-alej      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
-
-	i = 0;
-	while (*s)
-	{
-		i++;
-		s++;
-	}
-	return (i);
-}
 
 void	*ft_calloc(size_t nmemb, size_t size)
 {
@@ -63,55 +51,49 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
-	char	*s1_new;
-	char	*s2_new;
-	char	*str;
+	size_t	i;
+	size_t	j;
+	size_t	len;
+	char	*join;
 
-	s1_new = (char *)s1;
-	s2_new = (char *)s2;
-	str = (char *)ft_calloc(ft_strlen(s2) + ft_strlen(s1) + 1, 1);
-	if (!str)
+	if (!s1)
+		s1 = ft_calloc(1, 1);
+	if (!s1 || !s2)
 		return (NULL);
-	ft_strlcpy(str, s1, (ft_strlen(s1_new) + 1));
-	ft_strlcat(str, s2, ft_strlen(s1_new) + ft_strlen(s2_new) + 1);
-	return (str);
-}
-
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
-{
-	size_t	i;
-	size_t	len_src;
-
+	len = ft_strlen(s1) + ft_strlen(s2);
+	join = ft_calloc(len + 1, 1);
+	if (!join)
+		return (free(s1), NULL);
 	i = 0;
-	len_src = ft_strlen(src);
-	if (size <= 0)
-		return (len_src);
-	while ((i < size - 1) && (src[i]))
+	while (s1[i])
 	{
-		dst[i] = src[i];
+		join[i] = s1[i];
 		i++;
 	}
-	dst[i] = '\0';
-	return (len_src);
+	j = 0;
+	while (s2[j])
+		join[i++] = s2[j++];
+	free(s1);
+	return (join);
 }
-size_t	ft_strlcat(char *dst, const char *src, size_t size)
-{
-	size_t	i;
-	size_t	dst_len;
-	size_t	src_len;
 
-	dst_len = ft_strlen(dst);
-	src_len = ft_strlen(src);
-	if (size <= dst_len)
-		return (size + src_len);
+char	*ft_strdup(const char *s)
+{
+	char *copy_s;
+	int len_s;
+	size_t i;
+
 	i = 0;
-	while (src[i] && dst_len + i < size - 1)
+	len_s = ft_strlen(s);
+	copy_s = ft_calloc(len_s + 1, (sizeof(char)));
+	if (!copy_s)
+		return (NULL);
+	while (s[i])
 	{
-		dst[dst_len + i] = src[i];
+		copy_s[i] = s[i];
 		i++;
 	}
-	dst[dst_len + i] = '\0';
-	return (dst_len + src_len);
+	return (copy_s);
 }
