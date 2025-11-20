@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sergio-alejandro <sergio-alejandro@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/18 21:05:17 by sergio-alej       #+#    #+#             */
-/*   Updated: 2025/11/20 09:25:41 by sergio-alej      ###   ########.fr       */
+/*   Created: 2025/11/20 09:38:11 by sergio-alej       #+#    #+#             */
+/*   Updated: 2025/11/20 09:49:53 by sergio-alej      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 size_t	ft_strlen_until_jump_line(char *s)
 {
@@ -86,36 +86,65 @@ char	*verify_assigned(char *text)
 }
 char	*get_next_line(int fd)
 {
-	static char	*text;
+	static char	*text[OPEN_MAX];
 	char		*line;
 	char		*rest;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	text = read_file_descriptor(fd, text);
-	if (!text || !*text)
-		return (free(text), text = NULL, NULL);
-	line = read_one_line(text);
+	text[fd] = read_file_descriptor(fd, text[fd]);
+	if (!text[fd] || !*text[fd])
+		return (free(text[fd]), text[fd] = NULL, NULL);
+	line = read_one_line(text[fd]);
 	if (!line)
 		return (NULL);
-	rest = ft_strdup(text + ft_strlen_until_jump_line(text));
-	free(text);
+	rest = ft_strdup(text[fd] + ft_strlen_until_jump_line(text[fd]));
+	free(text[fd]);
 	if (!rest && !*rest)
-		return (free(rest), text = NULL);
-	text = rest;
+		return (free(rest), text[fd] = NULL);
+	text[fd] = rest;
 	return (line);
 }
 
-// int	main(int argc, char **argv)
+// int	main(void)
 // {
-// 	int	fd;
+// 	int		fd1;
+// 	int		fd2;
+// 	int		fd3;
+// 	char	*l1;
+// 	char	*l2;
+// 	char	*l3;
 
-// 	if (argc != 2)
+// 	fd1 = open("hola1.txt", O_RDONLY);
+// 	fd2 = open("hola2.txt", O_RDONLY);
+// 	fd3 = open("hola3.txt", O_RDONLY);
+// 	if (fd1 < 0 || fd2 < 0 || fd3 < 0)
 // 		return (EXIT_FAILURE);
-// 	fd = open(argv[1], O_RDONLY);
-// 	if (fd < 0)
-// 		return (EXIT_FAILURE);
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	close(fd);
+// 	while (true)
+// 	{
+// 		l1 = get_next_line(fd1);
+// 		l2 = get_next_line(fd2);
+// 		l3 = get_next_line(fd3);
+// 		if (!l1 && !l2 && !l3)
+// 			break ;
+// 		if (l1)
+// 		{
+// 			printf("FD1: %s", l1);
+// 			free(l1);
+// 		}
+// 		if (l2)
+// 		{
+// 			printf("FD2: %s", l2);
+// 			free(l2);
+// 		}
+// 		if (l3)
+// 		{
+// 			printf("FD3: %s", l3);
+// 			free(l3);
+// 		}
+// 	}
+// 	close(fd1);
+// 	close(fd2);
+// 	close(fd3);
+// 	return 0;
 // }

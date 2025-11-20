@@ -4,6 +4,7 @@
         "unistd.h": "c",
         "string.h": "c",
         "get_next_line.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "get_next_line_bonus.h": "c"
     }
 }
