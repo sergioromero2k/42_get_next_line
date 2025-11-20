@@ -6,7 +6,7 @@
 /*   By: sergio-alejandro <sergio-alejandro@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 21:05:17 by sergio-alej       #+#    #+#             */
-/*   Updated: 2025/11/19 21:58:44 by sergio-alej      ###   ########.fr       */
+/*   Updated: 2025/11/20 08:12:59 by sergio-alej      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,12 @@ char	*read_file_descriptor(int fd, char *text)
 	char	*tmp;
 
 	if (!text)
+	{
 		text = malloc(1);
+		if (!text)
+			return (NULL);
+		text[0] = '\0';
+	}
 	buf = malloc(BUFFER_SIZE + 1);
 	if (!buf || !text)
 		return (free(buf), free(text), NULL);
@@ -82,7 +87,6 @@ char	*get_next_line(int fd)
 	char		*line;
 	char		*rest;
 
-	text = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	text = read_file_descriptor(fd, text);

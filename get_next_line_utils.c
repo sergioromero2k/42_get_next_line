@@ -6,7 +6,7 @@
 /*   By: sergio-alejandro <sergio-alejandro@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 21:05:07 by sergio-alej       #+#    #+#             */
-/*   Updated: 2025/11/19 22:13:24 by sergio-alej      ###   ########.fr       */
+/*   Updated: 2025/11/20 08:09:24 by sergio-alej      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ size_t	ft_strlen(char *s)
 	size_t	i;
 
 	i = 0;
+	while (!s)
+		return (free(s), s = NULL, 0);
 	while (*s)
 	{
 		i++;
@@ -28,7 +30,7 @@ size_t	ft_strlen(char *s)
 char	*ft_strchr(char *s, int c)
 {
 	if (!s)
-		return (free(s), s = NULL, NULL);
+		return (NULL);
 	while (*s)
 	{
 		if (*s == (unsigned char)c)
@@ -40,33 +42,34 @@ char	*ft_strchr(char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strdup(char *s)
+char    *ft_strdup(char *s)
 {
-	char	*copy_s;
-	int		len_s;
-	size_t	i;
+    char    *copy_s;
+    size_t  len_s; 
+    size_t  i;
 
-	if (!s)
-		return (free(s), s = NULL, NULL);
-	i = 0;
-	len_s = ft_strlen(s);
-	copy_s = malloc(len_s + 1);
-	if (!copy_s)
-		return (NULL);
-	while (s[i])
-	{
-		copy_s[i] = s[i];
-		i++;
-	}
-	return (copy_s);
+    if (!s)
+        return (NULL);
+    i = 0;
+    len_s = ft_strlen(s);
+    copy_s = malloc(len_s + 1);
+    if (!copy_s)
+        return (NULL);
+    while (s[i])
+    {
+        copy_s[i] = s[i];
+        i++;
+    }
+    copy_s[i] = '\0'; 
+    return (copy_s);
 }
 
 char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*str;
 
-	if (!s1)
-		return (free(s1), s1 = NULL, NULL);
+	if (!s1 || !s2)
+		return (NULL);
 	str = (char *)malloc(ft_strlen(s2) + ft_strlen(s1) + 1);
 	if (!str)
 		return (NULL);
@@ -80,6 +83,8 @@ size_t	ft_strlcpy(char *dst, char *src, size_t size)
 	size_t	i;
 	size_t	len_src;
 
+	if (!dst)
+		return (0);
 	i = 0;
 	len_src = ft_strlen(src);
 	if (size <= 0)
