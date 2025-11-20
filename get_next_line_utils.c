@@ -6,7 +6,7 @@
 /*   By: sergio-alejandro <sergio-alejandro@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 21:05:07 by sergio-alej       #+#    #+#             */
-/*   Updated: 2025/11/20 08:09:24 by sergio-alej      ###   ########.fr       */
+/*   Updated: 2025/11/20 08:41:15 by sergio-alej      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ size_t	ft_strlen(char *s)
 
 	i = 0;
 	while (!s)
-		return (free(s), s = NULL, 0);
+		return (0);
 	while (*s)
 	{
 		i++;
@@ -26,7 +26,6 @@ size_t	ft_strlen(char *s)
 	}
 	return (i);
 }
-
 char	*ft_strchr(char *s, int c)
 {
 	if (!s)
@@ -42,77 +41,51 @@ char	*ft_strchr(char *s, int c)
 	return (NULL);
 }
 
-char    *ft_strdup(char *s)
+char	*ft_strdup(char *s)
 {
-    char    *copy_s;
-    size_t  len_s; 
-    size_t  i;
+	char	*copy_s;
+	size_t	len_s;
+	size_t	i;
 
-    if (!s)
-        return (NULL);
-    i = 0;
-    len_s = ft_strlen(s);
-    copy_s = malloc(len_s + 1);
-    if (!copy_s)
-        return (NULL);
-    while (s[i])
-    {
-        copy_s[i] = s[i];
-        i++;
-    }
-    copy_s[i] = '\0'; 
-    return (copy_s);
+	if (!s)
+		return (NULL);
+	i = 0;
+	len_s = ft_strlen(s);
+	copy_s = malloc(len_s + 1);
+	if (!copy_s)
+		return (NULL);
+	while (s[i])
+	{
+		copy_s[i] = s[i];
+		i++;
+	}
+	copy_s[i] = '\0';
+	return (copy_s);
 }
 
 char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*str;
+	size_t	i;
+	size_t	j;
 
 	if (!s1 || !s2)
 		return (NULL);
-	str = (char *)malloc(ft_strlen(s2) + ft_strlen(s1) + 1);
+	str = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!str)
 		return (NULL);
-	ft_strlcpy(str, s1, (ft_strlen(s1) + 1));
-	ft_strlcat(str, s2, ft_strlen(s1) + ft_strlen(s2) + 1);
+	i = 0;
+	while (i < ft_strlen(s1))
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (j < ft_strlen(s2))
+	{
+		str[i + j] = s2[j];
+		j++;
+	}
+	str[i + j] = '\0';
 	return (str);
-}
-
-size_t	ft_strlcpy(char *dst, char *src, size_t size)
-{
-	size_t	i;
-	size_t	len_src;
-
-	if (!dst)
-		return (0);
-	i = 0;
-	len_src = ft_strlen(src);
-	if (size <= 0)
-		return (len_src);
-	while ((i < size - 1) && (src[i]))
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	dst[i] = '\0';
-	return (len_src);
-}
-size_t	ft_strlcat(char *dst, char *src, size_t size)
-{
-	size_t	i;
-	size_t	dst_len;
-	size_t	src_len;
-
-	dst_len = ft_strlen(dst);
-	src_len = ft_strlen(src);
-	if (size <= dst_len)
-		return (size + src_len);
-	i = 0;
-	while (src[i] && dst_len + i < size - 1)
-	{
-		dst[dst_len + i] = src[i];
-		i++;
-	}
-	dst[dst_len + i] = '\0';
-	return (dst_len + src_len);
 }

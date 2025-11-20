@@ -6,7 +6,7 @@
 /*   By: sergio-alejandro <sergio-alejandro@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 21:05:20 by sergio-alej       #+#    #+#             */
-/*   Updated: 2025/11/20 07:47:43 by sergio-alej      ###   ########.fr       */
+/*   Updated: 2025/11/20 08:49:16 by sergio-alej      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@
 
 size_t	ft_strlen(char *s);
 char	*ft_strchr(char *s, int c);
-size_t	ft_strlcpy(char *dst, char *src, size_t size);
+char	*ft_strdup(char *s);
 char	*ft_strjoin(char *s1, char *s2);
 size_t	ft_strlen_until_jump_line(char *s);
 char	*read_one_line(char *line);
+char	*read_file_descriptor(int fd, char *text);
+char	*verify_assigned(char *text);
 char	*get_next_line(int fd);
-size_t	ft_strlcat(char *dst, char *src, size_t size);
-char	*ft_strdup(char *s);
 
 #endif

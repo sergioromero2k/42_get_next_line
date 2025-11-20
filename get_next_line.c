@@ -6,7 +6,7 @@
 /*   By: sergio-alejandro <sergio-alejandro@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 21:05:17 by sergio-alej       #+#    #+#             */
-/*   Updated: 2025/11/20 08:12:59 by sergio-alej      ###   ########.fr       */
+/*   Updated: 2025/11/20 08:57:30 by sergio-alej      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,39 +24,6 @@ size_t	ft_strlen_until_jump_line(char *s)
 	if (s[i] == '\n')
 		i++;
 	return (i);
-}
-
-char	*read_file_descriptor(int fd, char *text)
-{
-	char	*buf;
-	ssize_t	n_read;
-	char	*tmp;
-
-	if (!text)
-	{
-		text = malloc(1);
-		if (!text)
-			return (NULL);
-		text[0] = '\0';
-	}
-	buf = malloc(BUFFER_SIZE + 1);
-	if (!buf || !text)
-		return (free(buf), free(text), NULL);
-	n_read = 1;
-	while (!ft_strchr(text, '\n') && n_read > 0)
-	{
-		n_read = read(fd, buf, BUFFER_SIZE);
-		if (n_read < 0)
-			return (free(buf), free(text), NULL);
-		buf[n_read] = '\0';
-		tmp = text;
-		text = ft_strjoin(tmp, buf);
-		free(tmp);
-		if (!text)
-			return (free(buf), NULL);
-	}
-	free(buf);
-	return (text);
 }
 
 char	*read_one_line(char *line)
@@ -81,6 +48,42 @@ char	*read_one_line(char *line)
 	return (new_line);
 }
 
+char	*read_file_descriptor(int fd, char *text)
+{
+	char	*buf;
+	ssize_t	n_read;
+	char	*tmp;
+
+	text = verify_assigned(text);
+	buf = malloc(BUFFER_SIZE + 1);
+	if (!buf || !text)
+		return (free(buf), free(text), NULL);
+	n_read = 1;
+	while (!ft_strchr(text, '\n') && n_read > 0)
+	{
+		if ((n_read = read(fd, buf, BUFFER_SIZE)) < 0)
+			return (free(buf), free(text), NULL);
+		buf[n_read] = '\0';
+		tmp = text;
+		text = ft_strjoin(tmp, buf);
+		free(tmp);
+		if (!text)
+			return (free(buf), NULL);
+	}
+	free(buf);
+	return (text);
+}
+char	*verify_assigned(char *text)
+{
+	if (!text)
+	{
+		text = malloc(1);
+		if (!text)
+			return (NULL);
+		text[0] = '\0';
+	}
+	return (text);
+}
 char	*get_next_line(int fd)
 {
 	static char	*text;
@@ -97,28 +100,21 @@ char	*get_next_line(int fd)
 		return (NULL);
 	rest = ft_strdup(text + ft_strlen_until_jump_line(text));
 	free(text);
-	if (rest && *rest)
-		text = rest;
-	else
-	{
-		free(rest);
-		text = NULL;
-	}
+	if (!rest && !*rest)
+		return (free(rest), text = NULL);
+	text = rest;
 	return (line);
 }
 
-// int	main(int argc, char **argv)
-// {
-// 	int	fd;
+int	main(int argc, char **argv)
+{
+	int	fd;
 
-// 	if (argc != 2)
-// 		return (EXIT_FAILURE);
-// 	fd = open(argv[1], O_RDONLY);
-// 	if (fd < 0)
-// 		return (EXIT_FAILURE);
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-
-// }
+	if (argc != 2)
+		return (EXIT_FAILURE);
+	fd = open(argv[1], O_RDONLY);
+	if (fd < 0)
+		return (EXIT_FAILURE);
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+}
