@@ -6,7 +6,7 @@
 /*   By: sergio-alejandro <sergio-alejandro@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 21:05:07 by sergio-alej       #+#    #+#             */
-/*   Updated: 2025/11/20 08:41:15 by sergio-alej      ###   ########.fr       */
+/*   Updated: 2025/11/22 21:12:30 by sergio-alej      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ size_t	ft_strlen(char *s)
 	size_t	i;
 
 	i = 0;
-	while (!s)
+	if (!s)
 		return (0);
 	while (*s)
 	{
@@ -26,6 +26,7 @@ size_t	ft_strlen(char *s)
 	}
 	return (i);
 }
+
 char	*ft_strchr(char *s, int c)
 {
 	if (!s)
@@ -66,26 +67,22 @@ char	*ft_strdup(char *s)
 char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*str;
-	size_t	i;
-	size_t	j;
+	size_t	len1;
+	size_t	len2;
+	char	*ptr;
 
 	if (!s1 || !s2)
 		return (NULL);
-	str = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	str = (char *)malloc(len1 + len2 + 1);
 	if (!str)
 		return (NULL);
-	i = 0;
-	while (i < ft_strlen(s1))
-	{
-		str[i] = s1[i];
-		i++;
-	}
-	j = 0;
-	while (j < ft_strlen(s2))
-	{
-		str[i + j] = s2[j];
-		j++;
-	}
-	str[i + j] = '\0';
+	ptr = str;
+	while (*s1)
+		*ptr++ = *s1++;
+	while (*s2)
+		*ptr++ = *s2++;
+	*ptr = '\0';
 	return (str);
 }

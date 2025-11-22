@@ -6,7 +6,7 @@
 /*   By: sergio-alejandro <sergio-alejandro@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 09:38:11 by sergio-alej       #+#    #+#             */
-/*   Updated: 2025/11/20 09:49:53 by sergio-alej      ###   ########.fr       */
+/*   Updated: 2025/11/22 20:20:23 by sergio-alej      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ char	*read_file_descriptor(int fd, char *text)
 	n_read = 1;
 	while (!ft_strchr(text, '\n') && n_read > 0)
 	{
-		if ((n_read = read(fd, buf, BUFFER_SIZE)) < 0)
+		n_read = read(fd, buf, BUFFER_SIZE);
+		if (n_read < 0)
 			return (free(buf), free(text), NULL);
 		buf[n_read] = '\0';
 		tmp = text;
@@ -73,6 +74,7 @@ char	*read_file_descriptor(int fd, char *text)
 	free(buf);
 	return (text);
 }
+
 char	*verify_assigned(char *text)
 {
 	if (!text)
@@ -84,6 +86,7 @@ char	*verify_assigned(char *text)
 	}
 	return (text);
 }
+
 char	*get_next_line(int fd)
 {
 	static char	*text[OPEN_MAX];
@@ -93,16 +96,20 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	text[fd] = read_file_descriptor(fd, text[fd]);
-	if (!text[fd] || !*text[fd])
-		return (free(text[fd]), text[fd] = NULL, NULL);
+	if (!text[fd])
+		return (NULL);
 	line = read_one_line(text[fd]);
 	if (!line)
-		return (NULL);
+		return (free(text[fd]), text[fd] = NULL, (NULL));
 	rest = ft_strdup(text[fd] + ft_strlen_until_jump_line(text[fd]));
 	free(text[fd]);
-	if (!rest && !*rest)
-		return (free(rest), text[fd] = NULL);
-	text[fd] = rest;
+	if (!rest || !*rest)
+	{
+		free(rest);
+		text[fd] = NULL;
+	}
+	else
+		text[fd] = rest;
 	return (line);
 }
 
@@ -146,5 +153,5 @@ char	*get_next_line(int fd)
 // 	close(fd1);
 // 	close(fd2);
 // 	close(fd3);
-// 	return 0;
+// 	return (0);
 // }
